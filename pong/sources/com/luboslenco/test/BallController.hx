@@ -24,7 +24,6 @@ class BallController extends Trait implements IUpdateable {
     
     function resetBall() {
         transform.pos.set(0, 0, 0);
-        body.syncBody();
 
         var forceX = Std.random(2) == 0 ? -10 : 10;
         var forceY = Std.random(100) / 10 - 5;
