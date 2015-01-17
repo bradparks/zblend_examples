@@ -6,10 +6,11 @@ import fox.math.Helper;
 import fox.math.Quat;
 import fox.math.Box3;
 import fox.math.Ray;
+import fox.math.Vec3;
 import fox.Root;
 import fox.trait.Input;
 import fox.trait.Transform;
-import fox.trait.SceneRenderer;
+import fox.trait.GameScene;
 import fox.trait.RigidBody;
 
 class CubeController extends Trait implements IUpdateable {
@@ -21,7 +22,7 @@ class CubeController extends Trait implements IUpdateable {
     var input:Input;
 
     @inject({asc:true,sibl:true})
-    var scene:SceneRenderer;
+    var scene:GameScene;
 
     @inject
     var body:RigidBody;
@@ -62,7 +63,7 @@ class CubeController extends Trait implements IUpdateable {
         else if (input.released) {
             
             if (picked) {
-                body.body.position.z = startZ + 0.05;
+                transform.pos.z = startZ + 0.05;
                 body.body.isStatic = false;
             }
             picked = false;
@@ -71,26 +72,26 @@ class CubeController extends Trait implements IUpdateable {
 
 
         if (picked) {
-
-            var v = getIntersect(boardTransform);
+            var v = getIntersect(boardTransform, 2);
 
             if (v != null) {
-                body.body.orientation.init(orient.w, orient.x, orient.y, orient.z);
-                body.body.position.init(v.x, v.y, v.z + 5);
+                transform.rot.set(orient.x, orient.y, orient.z, orient.w);
+                transform.pos.set(v.x, v.y, v.z + 5);
                 body.body.isStatic = true;
             }
         }
     }
 
-    function getIntersect(transform:Transform):fox.math.Vector3 {
+    function getIntersect(transform:Transform, ext:Float = 1):Vec3 {
         ray = Helper.getRay(input.x, input.y, scene.camera);
 
         var t = transform;
-        var c = new fox.math.Vector3(t.absx, t.absy, t.absz);
-        var s = new fox.math.Vector3(t.size.x * 2, t.size.y * 2, t.size.z);
+        var c = new Vec3(t.absx, t.absy, t.absz);
+        var s = new Vec3(t.size.x * ext, t.size.y * ext, t.size.z);
 
         box.setFromCenterAndSize(c, s);
 
-        return ray.intersectBox(box);
+        var r = ray.intersectBox(box);
+        return r;
     }
 }
