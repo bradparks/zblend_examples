@@ -73,8 +73,6 @@ class GridController extends Trait implements IUpdateable {
     }
 
     function highlightMoves() {
-        assembler.transforms[0].owner.getTrait(fox.trait.MeshRenderer).color.x = 0;
-
         for (t in assembler.transforms) {
             var tt = t.owner.getTrait(TileData);
             var mr = t.owner.getTrait(fox.trait.MeshRenderer);
