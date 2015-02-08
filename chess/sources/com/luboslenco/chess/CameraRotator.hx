@@ -1,4 +1,4 @@
-package com.luboslenco.test;
+package com.luboslenco.chess;
 
 import fox.core.IUpdateable;
 import fox.core.Trait;
